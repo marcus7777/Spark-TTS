@@ -92,7 +92,20 @@ def run_tts(
 
 
 def build_ui(model_dir, device=0):
-
+    def split_first_line(text):
+    """Return the first sentence or line and the remaining text"""
+    
+    # Check if the text ends with a newline character
+    if text.endswith('\n'):
+        # Split the text by newline characters
+        lines = text.split('\n')
+        # Return the first line and the rest of the text
+        return lines[0], '\n'.join(lines[1:])
+    else:
+        # Split the text by periods
+        sentences = re.split(r'(?<!\w\.\w)\.(?!\@)', text)
+        # Return the first sentence and the rest of the text
+        return sentences[0], '\n'.join(sentences[1:])
     # Initialize model
     model = initialize_model(model_dir, device=device)
 
@@ -104,16 +117,19 @@ def build_ui(model_dir, device=0):
         - prompt_text: Additional textual info for the prompt (optional).
         - prompt_wav_upload/prompt_wav_record: Audio files used as reference.
         """
+        first_line, rest_of_text = split_first_line(text)
+        
+        
         prompt_speech = prompt_wav_upload if prompt_wav_upload else prompt_wav_record
         prompt_text_clean = None if len(prompt_text) < 2 else prompt_text
 
         audio_output_path = run_tts(
-            text,
+            first_line,
             model,
             prompt_text=prompt_text_clean,
             prompt_speech=prompt_speech
         )
-        return audio_output_path
+        return audio_output_path, rest_of_text
 
     # Define callback function for creating new voices
     def voice_creation(text, gender, pitch, speed):
@@ -180,7 +196,7 @@ def build_ui(model_dir, device=0):
                         prompt_wav_upload,
                         prompt_wav_record,
                     ],
-                    outputs=[audio_output],
+                    outputs=[audio_output, text_input],
                 )
 
             # Voice Creation Tab
