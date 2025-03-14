@@ -160,7 +160,7 @@ def build_ui(model_dir, device=0):
             # Voice Clone Tab
             with gr.TabItem("Voice Clone"):
                 gr.Markdown(
-                    "### Upload reference audio or recording （上传参考音频或者录音）"
+                    "### Upload reference audio or recording"
                 )
 
                 with gr.Row():
@@ -211,7 +211,7 @@ def build_ui(model_dir, device=0):
                 with gr.Row():
                     with gr.Column():
                         gender = gr.Radio(
-                            choices=["male", "female"], value="male", label="Gender"
+                            choices=["male", "female"], value="female", label="Gender"
                         )
                         pitch = gr.Slider(
                             minimum=1, maximum=5, step=1, value=3, label="Pitch"
