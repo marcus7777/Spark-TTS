@@ -93,19 +93,21 @@ def run_tts(
 
 def build_ui(model_dir, device=0):
     def split_first_line(text):
-    """Return the first sentence or line and the remaining text"""
+        """Return the first sentence or line and the remaining text"""
     
-    # Check if the text ends with a newline character
-    if text.endswith('\n'):
-        # Split the text by newline characters
-        lines = text.split('\n')
-        # Return the first line and the rest of the text
-        return lines[0], '\n'.join(lines[1:])
-    else:
-        # Split the text by periods
-        sentences = re.split(r'(?<!\w\.\w)\.(?!\@)', text)
-        # Return the first sentence and the rest of the text
-        return sentences[0], '\n'.join(sentences[1:])
+        # Check if the text ends with a newline character
+        if text.endswith('\n'):
+            # Split the text by newline characters
+            lines = text.split('\n')
+            # Return the first line and the rest of the text
+            return lines[0], '\n'.join(lines[1:])
+        else:
+            # Split the text by periods
+            sentences = re.split(r'(?<!\w\.\w)\.(?!\@)', text)
+            # Return the first sentence and the rest of the text
+            return sentences[0], '\n'.join(sentences[1:])
+
+    
     # Initialize model
     model = initialize_model(model_dir, device=device)
 
